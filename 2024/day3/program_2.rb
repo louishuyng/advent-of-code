@@ -18,6 +18,7 @@ end
 
 def read_input
   # Read input from file input
+  # input = File.open('example_input_2', 'r')
   input = File.open('input', 'r')
 
   lines = []
@@ -35,11 +36,31 @@ def aggregate_mul_instruction_per_line(line)
   aggregate = []
   current_index = 0
 
+  enabled = true
+
   while current_index < line.length
+    if line[current_index, 7] == "don't()"
+      enabled = false
+      current_index += 7
+      next
+    end
+
+    if line[current_index, 4] == 'do()'
+      enabled = true
+      current_index += 4
+      next
+    end
+
+    unless enabled
+      current_index += 1
+      next
+    end
+
     unless line[current_index, instruction_name.length] == instruction_name
       current_index += 1
       next
     end
+
     current_index += instruction_name.length
 
     param1, param2, next_index = get_next_param_number(line, current_index)
