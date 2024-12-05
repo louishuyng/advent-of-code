@@ -1,3 +1,5 @@
+require './recover_page'
+
 def program
   order_rules, pages = read_input
 
@@ -9,14 +11,16 @@ def program
   puts "\n"
   puts "Print: #{print}"
 
-  correct_pages = pages.select do |page|
+  incorrect_pages = pages.reject do |page|
     page_incorrect_order?(page, print)
   end
 
-  puts "Correct Pages: #{correct_pages}"
+  puts "Incorrect Pages: #{incorrect_pages}"
 
   # Sum only middle element of the page
-  total = correct_pages.inject(0) do |sum, page|
+  total = incorrect_pages
+          .map { |page| recover_page(page, print) }
+          .inject(0) do |sum, page|
     sum + page[page.length / 2]
   end
 
@@ -27,8 +31,8 @@ def read_input
   order_rules = []
   pages = []
 
-  filename = 'example_input'
-  # filename = 'input'
+  # filename = 'example_input'
+  filename = 'input'
 
   File.open(filename, 'r') do |file|
     # If include | then first element and second element are separated by | and add to order_rules
