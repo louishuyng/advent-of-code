@@ -8,25 +8,49 @@ def program
   puts "Obstacles: #{obstacles}"
   puts "Row: #{row}"
 
-  steps = 0
+  ways = 0
+
+  for i in 0..row - 1
+    for j in 0..row - 1
+      puts "i: #{i}, j: #{j}"
+      next if obstacles[i].include?(j)
+      next if i == current_position[0] && j == current_position[1]
+
+      obstacles[i] << j
+
+      ways += 1 if loop?(current_position, current_direction, obstacles, row, row)
+
+      obstacles[i].delete(j)
+    end
+  end
+
+  puts "Ways: #{ways}"
+end
+
+def loop?(current_position, current_direction, obstacles, row, col)
   has_visited = {}
 
-  until over_tank?(current_position, row, row)
+  until over_tank?(current_position, row, col)
     if face_obstacle?(next_move(current_position, current_direction), obstacles)
       current_direction = rotate_position_90_degree(current_direction)
     else
       current_position = next_move(current_position, current_direction)
 
-      has_visited[current_position[0]] = [] unless has_visited[current_position[0]]
+      has_visited[current_position[0]] = {} unless has_visited[current_position[0]]
 
-      next if has_visited[current_position[0]].include?(current_position[1])
+      unless has_visited[current_position[0]][current_position[1]]
+        has_visited[current_position[0]][current_position[1]] =
+          []
+      end
 
-      has_visited[current_position[0]] << current_position[1]
-      steps += 1
+      return true if has_visited[current_position[0]][current_position[1]].include?(current_direction)
+
+      has_visited[current_position[0]][current_position[1]] << current_direction
+      next
     end
   end
 
-  puts "Steps: #{steps}"
+  false
 end
 
 def over_tank?(current_position, row, col)

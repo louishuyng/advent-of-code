@@ -2,7 +2,6 @@ def read_input
   current_position = nil
   current_direction = nil
   row = 0
-  col = 0
 
   obstacles = []
 
@@ -13,7 +12,6 @@ def read_input
     file.each_line.with_index do |line, index|
       row += 1
       obstacles[index] = []
-      col ||= line.length
 
       line.each_char.with_index do |char, char_index|
         obstacles[index] << char_index if char == '#'
@@ -34,5 +32,5 @@ def read_input
     end
   end
 
-  [row, col, current_position, current_direction, obstacles]
+  [row, current_position, current_direction, obstacles]
 end
