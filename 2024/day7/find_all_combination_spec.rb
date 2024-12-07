@@ -15,5 +15,19 @@ describe '#find_all_combination' do
         %i[multiply multiply multiply]
       ]
     )
+
+    expect(find_all_combination(2, %i[add multiply combine])).to eq(
+      [
+        %i[add add],
+        %i[add multiply],
+        %i[add combine],
+        %i[multiply add],
+        %i[multiply multiply],
+        %i[multiply combine],
+        %i[combine add],
+        %i[combine multiply],
+        %i[combine combine]
+      ]
+    )
   end
 end
