@@ -1,8 +1,8 @@
-def find_trail_head_score(map, start_positions)
+def find_trail_head_score(map, start_positions, distinct_check = true)
   start_positions.map do |start_position|
     possible_end_positions = find_possible_end_positions_can_reach_from_start(map, start_position)
 
-    calculate_trail_head_score(possible_end_positions)
+    calculate_trail_head_score(possible_end_positions, distinct_check)
   end.inject(:+)
 end
 
@@ -41,17 +41,21 @@ def find_possible_end_positions_can_reach_from_start(map, start_position, result
   result
 end
 
-def calculate_trail_head_score(possible_end_positions)
-  checked = {}
-  score = 0
+def calculate_trail_head_score(possible_end_positions, distinct_check)
+  if distinct_check
+    score = 0
 
-  possible_end_positions.each do |end_position|
-    checked[end_position[0]] = {} unless checked[end_position[0]]
-    next if checked[end_position[0]][end_position[1]]
+    checked = {}
+    possible_end_positions.each do |end_position|
+      checked[end_position[0]] = {} unless checked[end_position[0]]
+      next if checked[end_position[0]][end_position[1]]
 
-    checked[end_position[0]][end_position[1]] = true
-    score += 1
+      checked[end_position[0]][end_position[1]] = true
+      score += 1
+    end
+
+    return score
   end
 
-  score
+  possible_end_positions.length
 end
