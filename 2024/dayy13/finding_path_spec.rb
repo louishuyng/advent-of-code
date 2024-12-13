@@ -8,7 +8,7 @@ describe '#cheapest_tokens_to_win_prize' do
       button_b = [22, 67]
       prize_location = [8400, 5400]
 
-      expect(cheapest_tokens_to_win_prize(button_a, button_b, prize_location)).to eq(280)
+      expect(cheapest_tokens_to_win_prize(button_a, button_b, prize_location, 100)).to eq(280)
     end
   end
 
@@ -18,7 +18,7 @@ describe '#cheapest_tokens_to_win_prize' do
       button_b = [84, 37]
       prize_location = [7870, 6450]
 
-      expect(cheapest_tokens_to_win_prize(button_a, button_b, prize_location)).to eq(200)
+      expect(cheapest_tokens_to_win_prize(button_a, button_b, prize_location, 100)).to eq(200)
     end
   end
 
@@ -28,7 +28,7 @@ describe '#cheapest_tokens_to_win_prize' do
       button_b = [67, 21]
       prize_location = [12_748, 12_176]
 
-      expect(cheapest_tokens_to_win_prize(button_a, button_b, prize_location)).to eq(0)
+      expect(cheapest_tokens_to_win_prize(button_a, button_b, prize_location, 100)).to eq(0)
     end
   end
 end

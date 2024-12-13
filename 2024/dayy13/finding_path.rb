@@ -1,36 +1,22 @@
-THRESH_BUTTON_PRESS = 1000 # Set a high threshold to prevent premature termination
+def cheapest_tokens_to_win_prize(button_a, button_b, prize_location, limit)
+  ax = button_a[0]
+  ay = button_a[1]
 
-def cheapest_tokens_to_win_prize(button_a, button_b, prize_location)
-  # Initialize the queue for BFS: [current_position, tokens_spent]
-  queue = [[0, 0]] # Start at position (0, 0) with 0 tokens spent
-  visited = {} # HashSet to track visited positions
+  bx = button_b[0]
+  by = button_b[1]
 
-  until queue.empty?
-    position, tokens_spent = queue.shift
+  px = prize_location[0]
+  py = prize_location[1]
 
-    # Check if we've reached the prize location
-    return tokens_spent if position == prize_location
+  ca = (px * by - py * bx).to_f / (ax * by - ay * bx)
+  cb = (px - ax * ca).to_f / bx
 
-    # Move using Button A
-    new_position_a = [position[0] + button_a[0], position[1] + button_a[1]]
-    new_tokens_a = tokens_spent + 3
+  # Initialize total variable
 
-    # Move using Button B
-    new_position_b = [position[0] + button_b[0], position[1] + button_b[1]]
-    new_tokens_b = tokens_spent + 1
+  # Check if ca and cb are integers and within the specified range
+  return 0 unless ca % 1 == 0 && cb % 1 == 0
 
-    # Add new positions to the queue if not visited
-    if !visited[new_position_a] && new_tokens_a <= THRESH_BUTTON_PRESS * 3
-      queue << [new_position_a, new_tokens_a]
-      visited[new_position_a] = true
-    end
+  return 0 if limit && !(ca <= 100 && cb <= 100)
 
-    if !visited[new_position_b] && new_tokens_b <= THRESH_BUTTON_PRESS
-      queue << [new_position_b, new_tokens_b]
-      visited[new_position_b] = true
-    end
-  end
-
-  # If we exhaust all options without reaching the prize
-  0 # Indicate failure to reach the prize
+  (ca * 3 + cb).to_i
 end
