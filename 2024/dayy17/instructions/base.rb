@@ -1,8 +1,9 @@
 class Instruction
-  def initialize(memory, operand, program_pointer)
+  def initialize(memory, operand, program_pointer, turn_off_stdout = false)
     @memory = memory
     @operand = operand
     @program_pointer = program_pointer
+    @turn_off_stdout = turn_off_stdout
   end
 
   def execute

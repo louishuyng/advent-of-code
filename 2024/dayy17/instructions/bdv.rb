@@ -1,7 +1,7 @@
 require_relative 'base'
 
 class BdvInstruction < Instruction
-  def initialize(memory, operand, program_pointer)
+  def initialize(memory, operand, program_pointer, turn_off_stdout = false)
     @name = 'bdv'
     @is_combo_operand = true
 
@@ -9,7 +9,7 @@ class BdvInstruction < Instruction
   end
 
   def execute
-    puts 'Executing bdv instruction'
+    puts 'Executing bdv instruction' unless @turn_off_stdout
 
     numberator = @memory.get_register_val('A')
 

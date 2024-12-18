@@ -1,7 +1,7 @@
 require_relative 'base'
 
 class AdvInstruction < Instruction
-  def initialize(memory, operand, program_pointer)
+  def initialize(memory, operand, program_pointer, turn_off_stdout = false)
     @name = 'adv'
     @is_combo_operand = true
 
@@ -9,7 +9,7 @@ class AdvInstruction < Instruction
   end
 
   def execute
-    puts 'Executing adv instruction'
+    puts 'Executing adv instruction' unless @turn_off_stdout
 
     numberator = @memory.get_register_val('A')
 

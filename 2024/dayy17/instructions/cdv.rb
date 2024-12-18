@@ -1,7 +1,7 @@
 require_relative 'base'
 
 class CdvInstruction < Instruction
-  def initialize(memory, operand, program_pointer)
+  def initialize(memory, operand, program_pointer, turn_off_stdout = false)
     @name = 'cdv'
     @is_combo_operand = true
 
@@ -9,7 +9,7 @@ class CdvInstruction < Instruction
   end
 
   def execute
-    puts 'Executing cdv instruction'
+    puts 'Executing cdv instruction' unless @turn_off_stdout
 
     numberator = @memory.get_register_val('A')
 

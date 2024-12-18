@@ -1,7 +1,7 @@
 require_relative 'base'
 
 class BxlInstruction < Instruction
-  def initialize(memory, operand, program_pointer)
+  def initialize(memory, operand, program_pointer, turn_off_stdout = false)
     @name = 'bxl'
     @is_combo_operand = false
 
@@ -9,7 +9,7 @@ class BxlInstruction < Instruction
   end
 
   def execute
-    puts 'Executing bxl instruction'
+    puts 'Executing bxl instruction' unless @turn_off_stdout
 
     register_b_val = @memory.get_register_val('B')
 

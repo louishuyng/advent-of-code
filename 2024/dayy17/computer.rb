@@ -25,12 +25,10 @@ class Computer
     end
   end
 
-  def execute(program)
+  def execute(program, turn_off_stdoutt: false)
     stdout = []
 
     init_memory_and_program(program)
-
-    puts "Loaded program: #{@program}"
 
     while @program_pointer.cursor < @program.length - 1
       instruction = current_instruction
@@ -41,7 +39,8 @@ class Computer
         instruction,
         operand,
         @memory,
-        @program_pointer
+        @program_pointer,
+        turn_off_stdout: turn_off_stdoutt
       )
 
       stdout << out if out
