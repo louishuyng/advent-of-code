@@ -1,24 +1,13 @@
-def generate_secret_number(number, number_of_generations = 1)
-  secret_number = number
+def generate_secret_number(initial_secret, generations = 2000)
+  secret = initial_secret
 
-  number_of_generations.times do
-    # First step: Calculate the result of multiplying the secret number by 64. Then, mix this result into the secret number. Finally, prune the secret number.
-    result_multiply = multiply(secret_number, 64)
-    secret_number = mix(secret_number, result_multiply)
-    secret_number = prune(secret_number)
-
-    # Second step: Calculate the result of dividing the secret number by 32. Round the result down to the nearest integer. Then, mix this result into the secret number. Finally, prune the secret number.
-    result_divided = (secret_number / 32).floor
-    secret_number = mix(secret_number, result_divided)
-    secret_number = prune(secret_number)
-
-    # Third step: Calculate the result of multiplying the secret number by 2048. Then, mix this result into the secret number. Finally, prune the secret number.
-    result_multiply = multiply(secret_number, 2048)
-    secret_number = mix(secret_number, result_multiply)
-    secret_number = prune(secret_number)
+  generations.times do
+    secret = prune(mix(secret, multiply(secret, 64)))
+    secret = prune(mix(secret, (secret / 32).floor))
+    secret = prune(mix(secret, multiply(secret, 2048)))
   end
 
-  secret_number
+  secret
 end
 
 def test
