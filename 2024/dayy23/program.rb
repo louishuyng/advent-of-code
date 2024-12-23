@@ -52,10 +52,8 @@ input = File.read('input').split("\n")
 
 list_connected = input.map do |line|
   node_a, node_b = line.split('-')
-  puts "node_a: #{node_a}, node_b: #{node_b}"
 
   [node_a, node_b]
 end
-
 
 program(list_connected)
