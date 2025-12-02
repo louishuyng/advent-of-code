@@ -7,18 +7,37 @@ import (
 	"strings"
 )
 
-// isInvalid checks if a number is made of a sequence repeated twice
-// e.g., 55 (5+5), 6464 (64+64), 123123 (123+123)
+// isInvalid checks if a number is made of a sequence repeated at least twice
+// e.g., 55 (5 x2), 123123 (123 x2), 123123123 (123 x3), 1111111 (1 x7)
 func isInvalid(n int64) bool {
 	s := strconv.FormatInt(n, 10)
+	length := len(s)
 
-	// Must have even length to be a repeated sequence
-	if len(s)%2 != 0 {
-		return false
+	// Try all possible pattern lengths from 1 to length/2
+	// (pattern must repeat at least twice, so max pattern length is length/2)
+	for patternLen := 1; patternLen <= length/2; patternLen++ {
+		// Pattern length must divide evenly into total length
+		if length%patternLen != 0 {
+			continue
+		}
+
+		pattern := s[:patternLen]
+		isRepeated := true
+
+		// Check if the entire string is made of this pattern
+		for i := patternLen; i < length; i += patternLen {
+			if s[i:i+patternLen] != pattern {
+				isRepeated = false
+				break
+			}
+		}
+
+		if isRepeated {
+			return true
+		}
 	}
 
-	half := len(s) / 2
-	return s[:half] == s[half:]
+	return false
 }
 
 func main() {
