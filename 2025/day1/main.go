@@ -20,7 +20,7 @@ type Rotation struct {
 }
 
 func main() {
-	rotations, err := readFileAndParseRotations("input")
+	rotations, err := readFileAndParseRotations(os.Args[1])
 	if err != nil {
 		fmt.Println("Error reading rotations:", err)
 		return
@@ -61,21 +61,33 @@ func readFileAndParseRotations(filename string) ([]Rotation, error) {
 
 func calculatePassword(rotations []Rotation) int {
 	startPoint := 50
-	dialPoints := 0
+	totalZeros := 0
 
 	for _, rotation := range rotations {
-		switch rotation.Operation {
-		case LeftRotate:
-			startPoint -= rotation.Amount
-		case RightRotate:
-			startPoint += rotation.Amount
-		}
-		startPoint = (startPoint + 100) % 100 // wrap around 0-99
+		var zeros int
+		var end int
 
-		if startPoint == 0 {
-			dialPoints += 1
+		switch rotation.Operation {
+		case RightRotate:
+			end = startPoint + rotation.Amount
+			// Count multiples of 100 crossed: floor(end/100) - floor(start/100)
+			zeros = end/100 - startPoint/100
+		case LeftRotate:
+			end = startPoint - rotation.Amount
+			// Count zeros crossed: ceil(start/100) - ceil(end/100)
+			zeros = ceilDiv(startPoint, 100) - ceilDiv(end, 100)
 		}
+
+		totalZeros += zeros
+		startPoint = ((end % 100) + 100) % 100
 	}
 
-	return dialPoints
+	return totalZeros
+}
+
+func ceilDiv(a, b int) int {
+	if a > 0 {
+		return (a + b - 1) / b
+	}
+	return a / b // Go truncates toward zero, which is ceiling for negatives
 }
