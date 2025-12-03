@@ -15,9 +15,9 @@ func main() {
 	dataStr := string(data)
 	lines := splitLines(dataStr)
 
-	totalJoltage := 0
+	var totalJoltage int64 = 0
 	for _, bank := range lines {
-		joltage := findMaxJoltage(bank)
+		joltage := findMaxJoltage(bank, 12)
 		totalJoltage += joltage
 	}
 
@@ -37,21 +37,38 @@ func splitLines(s string) []string {
 	return lines
 }
 
-func findMaxJoltage(bank string) int {
+func findMaxJoltage(bank string, pick int) int64 {
 	n := len(bank)
-	max := 0
-
-	for i := range n {
-		first := int(bank[i] - '0')
-		for j := i + 1; j < n; j++ {
-			second := int(bank[j] - '0')
-			sum := first*10 + second
-
-			if sum > max {
-				max = sum
-			}
-		}
+	if n < pick {
+		return 0
 	}
 
-	return max
+	// Greedy approach: for each digit position, pick the largest digit
+	// that still leaves enough digits for remaining picks
+
+	var result int64 = 0
+	startPos := 0
+
+	for i := 0; i < pick; i++ {
+		remaining := pick - i   // digits still to pick (including this one)
+		endPos := n - remaining // last valid position to pick from
+
+		// Find the maximum digit in range [startPos, endPos]
+		maxDigit := byte('0')
+		maxIdx := startPos
+		for j := startPos; j <= endPos; j++ {
+			if bank[j] > maxDigit {
+				maxDigit = bank[j]
+				maxIdx = j
+			}
+		}
+
+		// Add this digit to result
+		result = result*10 + int64(maxDigit-'0')
+
+		// Next pick must start after this position
+		startPos = maxIdx + 1
+	}
+
+	return result
 }
