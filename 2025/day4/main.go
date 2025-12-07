@@ -8,9 +8,9 @@ import (
 )
 
 func main() {
-	var grid []string
+	var grid [][]byte
 
-	// Read from input.txt
+	// Read from input file
 	file, err := os.Open(os.Args[1])
 	if err != nil {
 		fmt.Println("Error opening file:", err)
@@ -22,7 +22,7 @@ func main() {
 	for scanner.Scan() {
 		line := strings.TrimSpace(scanner.Text())
 		if line != "" {
-			grid = append(grid, line)
+			grid = append(grid, []byte(line))
 		}
 	}
 
@@ -51,20 +51,46 @@ func main() {
 		return count
 	}
 
-	accessible := 0
-
+	// Part 1: count initially accessible
+	part1 := 0
 	for r := 0; r < rows; r++ {
 		for c := 0; c < cols; c++ {
-			// Only check positions with paper rolls
 			if grid[r][c] == '@' {
-				neighbors := countNeighbors(r, c)
-				// Accessible if fewer than 4 neighbors
-				if neighbors < 4 {
-					accessible++
+				if countNeighbors(r, c) < 4 {
+					part1++
 				}
 			}
 		}
 	}
+	fmt.Println("Part 1:", part1)
 
-	fmt.Println("Accessible rolls of paper:", accessible)
+	// Part 2: simulate removal until none accessible
+	totalRemoved := 0
+
+	for {
+		// Find all currently accessible rolls
+		var toRemove [][2]int
+		for r := 0; r < rows; r++ {
+			for c := 0; c < cols; c++ {
+				if grid[r][c] == '@' {
+					if countNeighbors(r, c) < 4 {
+						toRemove = append(toRemove, [2]int{r, c})
+					}
+				}
+			}
+		}
+
+		// If none accessible, we're done
+		if len(toRemove) == 0 {
+			break
+		}
+
+		// Remove all accessible rolls
+		for _, pos := range toRemove {
+			grid[pos[0]][pos[1]] = '.'
+		}
+		totalRemoved += len(toRemove)
+	}
+
+	fmt.Println("Part 2:", totalRemoved)
 }
